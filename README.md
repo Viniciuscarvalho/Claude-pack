@@ -6,15 +6,15 @@ Available on [techpacks.mcs-cli.dev](https://techpacks.mcs-cli.dev).
 
 ---
 
-## Instalação rápida
+## Quick Start
 
-### Pré-requisitos
+### Prerequisites
 
 ```bash
 brew install mcs-cli/tap/mcs
 ```
 
-### Adicionar e sincronizar
+### Add and sync
 
 ```bash
 mcs pack add Viniciuscarvalho/Claude-pack
@@ -22,30 +22,30 @@ mcs sync --global
 mcs doctor
 ```
 
-Pronto. Todos os skills, agents, commands e plugins estarão disponíveis no Claude Code.
+All skills, agents, commands and plugins will be available in Claude Code.
 
 ---
 
-## O que está incluído
+## What's Included
 
 ### Plugins
-| Plugin | Descrição |
-|--------|-----------|
-| Atlassian | Jira e Confluence |
-| ARS Contexta | Gestão de contexto e notas |
-| Claude HUD | Status line com info da sessão |
-| Frontend Design | Assistência de design frontend |
-| Swift LSP | Language server para Swift |
+| Plugin | Description |
+|--------|-------------|
+| Atlassian | Jira and Confluence integration |
+| ARS Contexta | Context management and note-taking |
+| Claude HUD | Status line with session info |
+| Frontend Design | Frontend design assistance |
+| Swift LSP | Swift language server integration |
 
 ### MCP Servers
-| Servidor | Descrição |
-|----------|-----------|
-| Cupertino | Documentação e APIs da Apple |
+| Server | Description |
+|--------|-------------|
+| Cupertino | Apple documentation and APIs |
 
 ### Skills — Swift & iOS
 `swift-best-practices` · `swift-concurrency` · `swift-testing` · `swift-testing-expert` · `swift-code-reviewer` · `swiftui-expert-skill` · `swiftui-ui-patterns` · `swiftui-view-refactor` · `swiftui-performance-audit` · `xcodebuildmcp-cli` · `xcode-build-fixer` · `xcode-build-orchestrator` · `xcode-build-benchmark` · `xcode-compilation-analyzer` · `xcode-project-analyzer` · `spm-build-analysis` · `ios-debugger-agent` · `kotlin-specialist` · `app-store-changelog`
 
-### Skills — Workflow de Engenharia
+### Skills — Engineering Workflow
 `tdd` · `code-analyzer` · `feature-marker` · `creating-pr` · `jira-to-pr-workflow` · `enrich-jira-task` · `context-optimization` · `prompt-architect` · `grill-me` · `grill-with-docs` · `find-docs` · `handoff` · `diagnose` · `skill-creator` · `create-skill` · `skill-orchestrator` · `to-prd` · `product-manager` · `remotion-best-practices` · `zellij-specialist`
 
 ### Agents
@@ -56,9 +56,9 @@ Pronto. Todos os skills, agents, commands e plugins estarão disponíveis no Cla
 
 ---
 
-## Sincronização entre Macs
+## Syncing Between Machines
 
-Este repositório é o source of truth do ambiente. Os diretórios do Claude Code são symlinks que apontam diretamente para cá:
+This repository is the source of truth for the entire Claude Code environment. The Claude Code directories are symlinks pointing directly here:
 
 ```
 ~/.claude/skills         →  ~/claude-pack/skills/
@@ -66,7 +66,52 @@ Este repositório é o source of truth do ambiente. Os diretórios do Claude Cod
 ~/.claude/settings.json  →  ~/claude-pack/config/settings.json
 ```
 
-### Setup manual (sem MCS)
+### Adding a new skill or agent
+
+Because the Claude Code directories are symlinks, any skill or agent installed locally lands directly inside this repo. To propagate it to other machines, just commit and push:
+
+```bash
+cd ~/claude-pack
+git add -A && git commit -m "chore: add new-skill" && git push
+```
+
+> **Important:** If you want the new skill to be installable via `mcs sync` (for new machines or other people), you also need to add a component entry to `techpack.yaml`. Without it, the files exist in the repo but MCS won't know to install them.
+
+```yaml
+- id: skill-new-skill
+  displayName: New Skill
+  description: What it does
+  skill:
+    source: skills/new-skill
+    destination: new-skill
+```
+
+### Sync scenarios
+
+| Scenario | What to do |
+|----------|------------|
+| Your own Macs (already set up with symlinks) | `git push` / `git pull` — that's it |
+| New Mac from scratch | `mcs pack add` + `mcs sync --global` — requires `techpack.yaml` to be up to date |
+| Someone else using your pack | Same as above |
+
+**In short:** `git` syncs the files between your own machines. `techpack.yaml` is what makes the pack installable for anyone else via MCS.
+
+---
+
+## New Machine Setup
+
+### Via MCS (recommended)
+
+```bash
+brew install mcs-cli/tap/mcs
+mcs pack add Viniciuscarvalho/Claude-pack
+mcs sync --global
+mcs doctor
+```
+
+### Manual setup with symlinks
+
+If you want to contribute back to the pack from this machine (push new skills/agents), clone the repo and create symlinks so Claude Code points directly to it:
 
 ```bash
 git clone git@github.com:Viniciuscarvalho/Claude-pack.git ~/claude-pack
@@ -78,28 +123,11 @@ ln -s ~/claude-pack/agents               ~/.claude/agents
 ln -s ~/claude-pack/config/settings.json ~/.claude/settings.json
 ```
 
-### Propagar uma nova skill
-
-Qualquer skill instalada cai direto no repo via symlink. Para sincronizar:
-
-```bash
-cd ~/claude-pack
-git add -A && git commit -m "chore: add nova-skill" && git push
-```
-
-No outro Mac:
-
-```bash
-cd ~/claude-pack && git pull
-# ou via MCS:
-mcs pack update Viniciuscarvalho/Claude-pack && mcs sync --global
-```
-
 ---
 
-## Verificar instalação
+## Verify Installation
 
 ```bash
 mcs doctor
-mcs doctor --fix   # corrige automaticamente
+mcs doctor --fix   # auto-fix issues
 ```
