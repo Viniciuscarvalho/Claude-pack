@@ -356,13 +356,6 @@ components:
       source: skills/find-skills
       destination: find-skills
 
-  - id: skill-official
-    displayName: Official Skills
-    description: Official Claude Code skill collection
-    skill:
-      source: skills/official
-      destination: official
-
   - id: skill-skill-debugger
     displayName: Skill Debugger
     description: Debug and troubleshoot Claude Code skills
