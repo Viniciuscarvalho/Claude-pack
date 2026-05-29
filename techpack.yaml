@@ -13,6 +13,11 @@ ignore:
   - CLAUDE.md
   - skills/agents
   - templates/custom.md
+  - skills/*/README.md
+  - skills/*/LICENSE
+  - skills/*/CHANGELOG.md
+  - skills/*/CONTRIBUTING.md
+  - skills/*/.DS_Store
 
 # ---------------------------------------------------------------------------
 # Components
